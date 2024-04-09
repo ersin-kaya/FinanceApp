@@ -15,6 +15,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 }); // we're adding this piece of code to prevent object cycles
+    // serialization = converting objects to json
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
