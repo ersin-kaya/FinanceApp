@@ -35,9 +35,9 @@ namespace api.Controllers
 
             var stocks = await _stockRepository.GetAllAsync(query);
 
-            var stockDto = stocks.Select(s => s.ToStockDto());
+            var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
 
-            return Ok(stocks);
+            return Ok(stockDto);
         }
 
         [HttpGet("{id:int}")]
