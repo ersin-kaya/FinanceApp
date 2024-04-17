@@ -5,6 +5,8 @@ import Search from './components/search/Search'
 import { CompanySearch } from './types';
 import axios from 'axios';
 import ListPortfolio from './components/portfolio/listPortfolio/ListPortfolio';
+import Navbar from './components/navbar/Navbar';
+import Hero from './components/hero/Hero';
 
 function App() {
   const [search, setSearch] = useState("");
@@ -59,6 +61,7 @@ function App() {
 
   return (
     <div className='App'>
+      <Navbar />
       <Search
         onSearchSubmit={handleSearchSubmit}
         search={search}
