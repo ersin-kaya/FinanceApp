@@ -16,7 +16,7 @@ function App() {
         `https://financialmodelingprep.com/api/v3/search-ticker?query=${query}&limit=10&exchange=NASDAQ&apikey=${import.meta.env.VITE_API_KEY
         }`
       );
-      console.log(response.data);
+      // console.log(response.data);
       setSearchResult(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -25,21 +25,32 @@ function App() {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     console.log(e);
   }
 
-  const handleClick = async (e: SyntheticEvent) => {
+  const onPortfolioCreate = (e: SyntheticEvent) => {
+    e.preventDefault();
+    console.log(e);
+  }
+
+  const handleSearchSubmit = async (e: SyntheticEvent) => {
     // console.log(result);
+    e.preventDefault();
     companySearch(search);
   }
 
   return (
     <div className='App'>
-      <Search onClick={handleClick} search={search} handleChange={handleChange} />
+      <Search
+        onSearchSubmit={handleSearchSubmit}
+        search={search}
+        handleSearchChange={handleSearchChange} />
       {serverError && <h1>{serverError}</h1>}
-      <CardList searchResult={searchResult} />
+      <CardList
+        searchResult={searchResult}
+        onPortfolioCreate={onPortfolioCreate} />
     </div>
   )
 };

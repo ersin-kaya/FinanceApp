@@ -1,14 +1,18 @@
+import { SyntheticEvent } from 'react';
 import { CompanySearch } from '../../types';
+import AddPortfolio from '../portfolio/addPortfolio/AddPortfolio';
 import './Card.css'
 
 interface Props {
     id: string;
-    searchResult: CompanySearch;
+    result: CompanySearch;
+    onPortfolioCreate: (e: SyntheticEvent) => void;
 }
 
 const Card = ({
     id,
-    searchResult
+    result: searchResult,
+    onPortfolioCreate
 }: Props) => {
     return (
         <div className='card'>
@@ -20,6 +24,7 @@ const Card = ({
             <p className="info">
                 {searchResult.exchangeShortName} - {searchResult.stockExchange}
             </p>
+            <AddPortfolio onPortfolioCreate={onPortfolioCreate} />
         </div>
     )
 }
