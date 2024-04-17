@@ -1,9 +1,14 @@
-import { SyntheticEvent } from "react"
+import { SyntheticEvent } from "react";
+import { CompanySearch } from "../../../types";
 
 type Props = {
-    onPortfolioCreate: (e: SyntheticEvent) => void;
+    onPortfolioCreate: (e: SyntheticEvent, result: CompanySearch) => void;
+    result: CompanySearch;
 };
-const AddPortfolio = ({ onPortfolioCreate }: Props) => {
-    return <button onClick={onPortfolioCreate}>AddPortfolio</button>;
+
+const AddPortfolio = ({ onPortfolioCreate, result }: Props) => {
+    return (
+        <button onClick={(e) => onPortfolioCreate(e, result)}>AddPortfolio</button>
+    );
 };
 export default AddPortfolio;

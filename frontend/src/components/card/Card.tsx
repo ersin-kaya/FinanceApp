@@ -6,25 +6,25 @@ import './Card.css'
 interface Props {
     id: string;
     result: CompanySearch;
-    onPortfolioCreate: (e: SyntheticEvent) => void;
+    onPortfolioCreate: (e: SyntheticEvent, result: CompanySearch) => void;
 }
 
 const Card = ({
     id,
-    result: searchResult,
+    result,
     onPortfolioCreate
 }: Props) => {
     return (
         <div className='card'>
             <img alt="company logo" />
             <div className="details">
-                <h2>{searchResult.name} ({searchResult.symbol})</h2>
-                <p>${searchResult.currency}</p>
+                <h2>{result.name} ({result.symbol})</h2>
+                <p>${result.currency}</p>
             </div>
             <p className="info">
-                {searchResult.exchangeShortName} - {searchResult.stockExchange}
+                {result.exchangeShortName} - {result.stockExchange}
             </p>
-            <AddPortfolio onPortfolioCreate={onPortfolioCreate} />
+            <AddPortfolio onPortfolioCreate={onPortfolioCreate} result={result} />
         </div>
     )
 }

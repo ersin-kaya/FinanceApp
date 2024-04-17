@@ -4,9 +4,11 @@ import CardList from './components/cardList/CardList'
 import Search from './components/search/Search'
 import { CompanySearch } from './types';
 import axios from 'axios';
+import ListPortfolio from './components/portfolio/listPortfolio/ListPortfolio';
 
 function App() {
   const [search, setSearch] = useState("");
+  const [portfolio, setPortfolio] = useState<CompanySearch[]>([]);
   const [serverError, setServerError] = useState<string>("");
   const [searchResult, setSearchResult] = useState<CompanySearch[]>([]);
 
@@ -27,13 +29,19 @@ function App() {
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    console.log(e);
+    // console.log(e);
   }
 
-  const onPortfolioCreate = (e: SyntheticEvent) => {
-    e.preventDefault();
-    console.log(e);
-  }
+  const onPortfolioCreate = (
+    e: SyntheticEvent,
+    result: CompanySearch
+  ) => {
+    // console.log(e);
+    if (!portfolio.find((item) => item.name === result.name)) {
+      setPortfolio([...portfolio, result]);
+    }
+    console.log(portfolio);
+  };
 
   const handleSearchSubmit = async (e: SyntheticEvent) => {
     // console.log(result);
@@ -48,6 +56,7 @@ function App() {
         search={search}
         handleSearchChange={handleSearchChange} />
       {serverError && <h1>{serverError}</h1>}
+      {portfolio.length > 0 && <ListPortfolio portfolio={portfolio} />}
       <CardList
         searchResult={searchResult}
         onPortfolioCreate={onPortfolioCreate} />
