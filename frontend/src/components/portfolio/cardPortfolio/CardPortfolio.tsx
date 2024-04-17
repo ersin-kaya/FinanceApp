@@ -1,14 +1,18 @@
 import { CompanySearch } from "../../../types";
+import DeletePortfolio from "../deletePortfolio/DeletePortfolio";
 
 interface Props {
     item: CompanySearch;
+    onPortfolioDelete: (item: CompanySearch) => void;
 }
 
-const CardPortfolio = ({ item }: Props) => {
+const CardPortfolio = ({ item, onPortfolioDelete }: Props) => {
     return (
         <>
             <h4>{item.name}</h4>
-            <button>X</button>
+            <DeletePortfolio
+                item={item}
+                onPortfolioDelete={onPortfolioDelete} />
         </>
     )
 }

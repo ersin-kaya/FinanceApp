@@ -27,6 +27,14 @@ function App() {
     }
   };
 
+  const handlePortfolioDelete = (item: CompanySearch) => {
+    setPortfolio(
+      portfolio.filter((element) => {
+        return element.name !== item.name;
+      })
+    );
+  };
+
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     // console.log(e);
@@ -56,7 +64,7 @@ function App() {
         search={search}
         handleSearchChange={handleSearchChange} />
       {serverError && <h1>{serverError}</h1>}
-      {portfolio.length > 0 && <ListPortfolio portfolio={portfolio} />}
+      {portfolio.length > 0 && <ListPortfolio portfolio={portfolio} onPortfolioDelete={handlePortfolioDelete} />}
       <CardList
         searchResult={searchResult}
         onPortfolioCreate={onPortfolioCreate} />
