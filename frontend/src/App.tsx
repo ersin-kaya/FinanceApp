@@ -2,13 +2,28 @@ import { ChangeEvent, SyntheticEvent, useState } from 'react'
 import './App.css'
 import CardList from './components/cardList/CardList'
 import Search from './components/search/Search'
-import { searchCompanies } from './api';
-import { useCompanySearch } from './hooks/useCompanySearch';
+import { CompanySearch } from './types';
+import axios from 'axios';
 
 function App() {
   const [search, setSearch] = useState("");
-  const searchResult = useCompanySearch(search);
   const [serverError, setServerError] = useState<string>("");
+  const [searchResult, setSearchResult] = useState<CompanySearch[]>([]);
+
+  const companySearch = async (query: string) => {
+    try {
+      const response = await axios.get<CompanySearch[]>(
+        `https://financialmodelingprep.com/api/v3/search-ticker?query=${query}&limit=10&exchange=NASDAQ&apikey=${import.meta.env.VITE_API_KEY
+        }`
+      );
+      console.log(response);
+      setSearchResult(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error: ", error.message);
+      } else console.log("unexpected error");
+    }
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -16,17 +31,8 @@ function App() {
   }
 
   const handleClick = async (e: SyntheticEvent) => {
-    // const result = await searchCompanies(search);
-    // if (typeof result === "string") {
-    //   setServerError(result);
-    // }
-    // else if (Array.isArray(result.data)) {
-    //   setSearchResult(result.data);
-    // }
-
-    const result = await searchResult;
-
-    console.log(result);
+    // console.log(result);
+    companySearch(search);
   }
 
   return (
@@ -36,6 +42,7 @@ function App() {
       <CardList />
     </div>
   )
-}
+};
+
 
 export default App
