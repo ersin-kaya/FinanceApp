@@ -16,7 +16,7 @@ function App() {
         `https://financialmodelingprep.com/api/v3/search-ticker?query=${query}&limit=10&exchange=NASDAQ&apikey=${import.meta.env.VITE_API_KEY
         }`
       );
-      console.log(response);
+      console.log(response.data);
       setSearchResult(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -39,7 +39,7 @@ function App() {
     <div className='App'>
       <Search onClick={handleClick} search={search} handleChange={handleChange} />
       {serverError && <h1>{serverError}</h1>}
-      <CardList />
+      <CardList searchResult={searchResult} />
     </div>
   )
 };
