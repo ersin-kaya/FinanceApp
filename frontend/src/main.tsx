@@ -1,11 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import HomePage from './pages/homePage/HomePage.tsx';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import SearchPage from './pages/searchPage/SearchPage.tsx';
-import CompanyPage from './pages/companyPage/CompanyPage.tsx';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import HomePage from "./pages/homePage/HomePage.tsx";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import SearchPage from "./pages/searchPage/SearchPage.tsx";
+import CompanyPage from "./pages/companyPage/CompanyPage.tsx";
+import CompanyProfile from "./components/companyProfile/CompanyProfile.tsx";
+import IncomeStatement from "./components/incomeStatement/IncomeStatement.tsx";
 
 const router = createBrowserRouter([
   {
@@ -14,13 +16,20 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <HomePage /> },
       { path: "search", element: <SearchPage /> },
-      { path: "company/:ticker", element: <CompanyPage /> },
-    ]
+      {
+        path: "company/:ticker",
+        element: <CompanyPage />,
+        children: [
+          { path: "company-profile", element: <CompanyProfile /> },
+          { path: "income-statement", element: <IncomeStatement /> },
+        ],
+      },
+    ],
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
