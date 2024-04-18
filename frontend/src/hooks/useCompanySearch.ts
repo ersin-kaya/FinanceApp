@@ -1,3 +1,4 @@
+import { CompanyProfile } from './../types';
 import { useEffect, useState } from "react"
 import { CompanySearch } from "../types";
 import axios from "axios";
@@ -26,4 +27,15 @@ export const useCompanySearch = async (query: string) => {
         fetchCompanies();
     }, []);
     return searchResult;
+}
+
+export const getCompanyProfile = async (companyName: string) => {
+    try {
+        const response = await axios.get<CompanyProfile[]>(
+            `https://financialmodelingprep.com/api/v3/profile/${companyName}?apikey=${import.meta.env.VITE_API_KEY}`
+        );
+        return response;
+    } catch (error: any) {
+        console.log("error message from API: ", error.message);
+    }
 }
