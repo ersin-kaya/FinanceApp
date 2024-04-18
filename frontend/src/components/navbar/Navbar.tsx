@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 interface Props { }
@@ -7,11 +8,13 @@ const Navbar = (props: Props) => {
         <nav className="relative container mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-20">
-                    <img className="h-20" src='./stock.jpg' alt="" />
+                    <Link to={"/"}>
+                        <img className="h-20" src='./stock.jpg' alt="" />
+                    </Link>
                     <div className="hidden font-bold lg:flex">
-                        <a href="" className="text-black hover:text-darkBlue">
-                            Dashboard
-                        </a>
+                        <Link to={"/search"} className="text-black hover:text-darkBlue">
+                            Search
+                        </Link>
                     </div>
                 </div>
                 <div className="hidden lg:flex items-center space-x-6 text-back">
