@@ -1,3 +1,4 @@
+import RatioList from "../../components/ratioList/RatioList";
 import Table from "../../components/table/Table";
 
 type Props = {};
@@ -5,12 +6,16 @@ type Props = {};
 const DesignGuide = (props: Props) => {
   return (
     <>
-      <h1>FinShark Design Page</h1>
-      <h2>
-        This is FinShark's design page. This is where we will house various
-        design aspects of the app
-      </h2>
+      <h1>
+        Design guide- This is the design guide for Fin Shark. These are reuable
+        components of the app with brief instructions on how to use them.
+      </h1>
+      <RatioList />
       <Table />
+      <h3>
+        Table - Table takes in a configuration object and company data as
+        params. Use the config to style your table.
+      </h3>
     </>
   );
 };
