@@ -34,6 +34,13 @@ const Sidebar = (props: Props) => {
               <FaHome />
               <h6 className="ml-3">Balance Sheet</h6>
             </Link>
+            <Link
+              to={"cashflow-statement"}
+              className="flex pt-1 pb-4 md:min-w-full font-bold text-blueGray-500 text-xs no-underline uppercase"
+            >
+              <FaHome />
+              <h6 className="ml-3">Cashflow Statement</h6>
+            </Link>
           </div>
         </div>
       </div>
