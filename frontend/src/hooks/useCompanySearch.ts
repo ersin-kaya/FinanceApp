@@ -1,4 +1,8 @@
-import { CompanyKeyMetrics, CompanyProfile } from "./../types";
+import {
+  CompanyIncomeStatement,
+  CompanyKeyMetrics,
+  CompanyProfile,
+} from "./../types";
 import { useEffect, useState } from "react";
 import { CompanySearch } from "../types";
 import axios from "axios";
@@ -46,6 +50,19 @@ export const getKeyMetrics = async (companySymbol: string) => {
   try {
     const response = await axios.get<CompanyKeyMetrics[]>(
       `https://financialmodelingprep.com/api/v3/key-metrics-ttm/${companySymbol}?apikey=${
+        import.meta.env.VITE_API_KEY
+      }`
+    );
+    return response;
+  } catch (error: any) {
+    console.log("error message from API: ", error.message);
+  }
+};
+
+export const getIncomeStatement = async (companySymbol: string) => {
+  try {
+    const response = await axios.get<CompanyIncomeStatement[]>(
+      `https://financialmodelingprep.com/api/v3/income-statement/${companySymbol}?apikey=${
         import.meta.env.VITE_API_KEY
       }`
     );
