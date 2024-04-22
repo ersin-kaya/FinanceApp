@@ -5,6 +5,7 @@ import { getCompanyProfile } from "../../hooks/useCompanySearch";
 import Sidebar from "../../components/sidebar/Sidebar";
 import CompanyDashboard from "../../components/companyDashboard/CompanyDashboard";
 import CompanyTile from "../../components/companyTile/CompanyTile";
+import Spinner from "../../components/spinner/Spinner";
 
 interface Props {}
 
@@ -36,7 +37,7 @@ const CompanyPage = (props: Props) => {
           </CompanyDashboard>
         </div>
       ) : (
-        <div>Company not found!</div>
+        <Spinner />
       )}
     </>
   );

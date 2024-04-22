@@ -3,6 +3,7 @@ import { CompanyCashFlow } from "../../types";
 import { useEffect, useState } from "react";
 import { getCashflowStatement } from "../../hooks/useCompanySearch";
 import Table from "../table/Table";
+import Spinner from "../spinner/Spinner";
 
 type Props = {};
 
@@ -60,7 +61,7 @@ const CashflowStatement = (props: Props) => {
       {cashflowData ? (
         <Table config={config} data={cashflowData} />
       ) : (
-        <h1>No results!</h1>
+        <Spinner />
       )}
     </>
   );
