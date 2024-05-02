@@ -1,15 +1,18 @@
 import axios from "axios";
 import { handleError } from "../helpers/errorHandler";
-import { UserProfileToken } from "../models/userProfileToken";
+import { UserProfileTokenModel } from "../models/userProfileTokenModel";
 
 const api = "http://localhost:5189/api/";
 
 export const loginAPI = async (username: string, password: string) => {
   try {
-    const data = await axios.post<UserProfileToken>(api + "account/login", {
-      username: username,
-      password: password,
-    });
+    const data = await axios.post<UserProfileTokenModel>(
+      api + "account/login",
+      {
+        username: username,
+        password: password,
+      }
+    );
     return data;
   } catch (error) {
     handleError(error);
@@ -22,11 +25,14 @@ export const registerAPI = async (
   password: string
 ) => {
   try {
-    const data = await axios.post<UserProfileToken>(api + "account/register", {
-      email: email,
-      username: username,
-      password: password,
-    });
+    const data = await axios.post<UserProfileTokenModel>(
+      api + "account/register",
+      {
+        email: email,
+        username: username,
+        password: password,
+      }
+    );
     return data;
   } catch (error) {
     handleError(error);

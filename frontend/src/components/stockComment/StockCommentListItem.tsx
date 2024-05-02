@@ -1,7 +1,7 @@
-import { CommentGet } from "../../models/commentGet";
+import { CommentGetModel } from "../../models/commentGetModel";
 
 type Props = {
-  comment: CommentGet;
+  comment: CommentGetModel;
 };
 
 const StockCommentListItem = ({ comment }: Props) => {

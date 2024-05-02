@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { UserProfile } from "../models/userProfile";
+import { UserProfileModel } from "../models/userProfileModel";
 import { useNavigate } from "react-router-dom";
 import { loginAPI, registerAPI } from "../services/authService";
 import { toast } from "react-toastify";
@@ -7,7 +7,7 @@ import React from "react";
 import axios from "axios";
 
 type UserContextType = {
-  user: UserProfile | null;
+  user: UserProfileModel | null;
   token: string | null;
   registerUser: (email: string, username: string, password: string) => void;
   loginUser: (username: string, password: string) => void;
@@ -22,7 +22,7 @@ const UserContext = createContext<UserContextType>({} as UserContextType);
 export const UserProvider = ({ children }: Props) => {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const [user, setUser] = useState<UserProfileModel | null>(null);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {

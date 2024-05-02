@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { postCommentAPI, getCommentsAPI } from "../../services/commentService";
 import StockCommentForm, { CommentFormInputs } from "./StockCommentForm";
-import { CommentGet } from "../../models/commentGet";
+import { CommentGetModel } from "../../models/commentGetModel";
 import { useEffect, useState } from "react";
 import Spinner from "../spinner/Spinner";
 import StockCommentList from "./StockCommentList";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const StockComment = ({ stockSymbol }: Props) => {
-  const [comments, setComments] = useState<CommentGet[] | null>(null);
+  const [comments, setComments] = useState<CommentGetModel[] | null>(null);
   const [loading, setLoading] = useState<boolean>();
 
   const getComments = () => {

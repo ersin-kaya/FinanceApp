@@ -1,4 +1,4 @@
-export type CommentPost = {
+export type CommentPostModel = {
   title: string;
   content: string;
 };
