@@ -14,6 +14,7 @@ import CashflowStatement from "./components/cashflowStatement/CashflowStatement.
 import HistoricalDividend from "./components/historicalDividend/HistoricalDividend.tsx";
 import LoginPage from "./pages/loginPage/LoginPage.tsx";
 import RegisterPage from "./pages/registerPage/RegisterPage.tsx";
+import ProtectedRoute from "./utils/ProtectedRoute.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,11 +24,29 @@ const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "login", element: <LoginPage /> },
-      { path: "search", element: <SearchPage /> },
-      { path: "design-guide", element: <DesignGuide /> },
+      {
+        path: "search",
+        element: (
+          <ProtectedRoute>
+            <SearchPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "design-guide",
+        element: (
+          <ProtectedRoute>
+            <DesignGuide />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "company/:ticker",
-        element: <CompanyPage />,
+        element: (
+          <ProtectedRoute>
+            <CompanyPage />
+          </ProtectedRoute>
+        ),
         children: [
           { path: "company-profile", element: <CompanyProfile /> },
           { path: "income-statement", element: <IncomeStatement /> },
