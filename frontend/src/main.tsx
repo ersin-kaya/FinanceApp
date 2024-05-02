@@ -12,6 +12,7 @@ import DesignGuide from "./pages/designGuide/DesignGuide.tsx";
 import BalanceSheet from "./components/balanceSheet/BalanceSheet.tsx";
 import CashflowStatement from "./components/cashflowStatement/CashflowStatement.tsx";
 import HistoricalDividend from "./components/historicalDividend/HistoricalDividend.tsx";
+import LoginPage from "./pages/loginPage/LoginPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: "", element: <HomePage /> },
+      { path: "login", element: <LoginPage /> },
       { path: "search", element: <SearchPage /> },
       { path: "design-guide", element: <DesignGuide /> },
       {
