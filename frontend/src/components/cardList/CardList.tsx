@@ -23,8 +23,8 @@ const CardList = ({ searchResult, onPortfolioCreate }: Props) => {
           );
         })
       ) : (
-        <p className="mb-3 mt-3 text-xl font-semibold text-center md:text-xl">
-          No results!
+        <p className="mb-3 mt-12 text-xl font-semibold text-center md:text-xl">
+          Search results: Nothing found!
         </p>
       )}
     </>
