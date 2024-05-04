@@ -1,18 +1,28 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { CompanySearch } from "../../types";
 import axios from "axios";
 import Search from "../../components/search/Search";
 import ListPortfolio from "../../components/portfolio/listPortfolio/ListPortfolio";
 import CardList from "../../components/cardList/CardList";
 import { toast } from "react-toastify";
+import { PortfolioGetModel } from "../../models/portfolioGetModel";
+import {
+  portfolioAddAPI,
+  portfolioDeleteAPI,
+  portfolioGetAPI,
+} from "../../services/portfolioService";
 
 interface Props {}
 
 const SearchPage = (props: Props) => {
   const [search, setSearch] = useState("");
-  const [portfolio, setPortfolio] = useState<CompanySearch[]>([]);
+  const [portfolio, setPortfolio] = useState<PortfolioGetModel[] | null>([]);
   const [serverError, setServerError] = useState<string>("");
   const [searchResult, setSearchResult] = useState<CompanySearch[]>([]);
+
+  useEffect(() => {
+    getPortfolio();
+  }, []);
 
   const companySearch = async (query: string) => {
     try {
@@ -33,12 +43,14 @@ const SearchPage = (props: Props) => {
     }
   };
 
-  const handlePortfolioDelete = (item: CompanySearch) => {
-    setPortfolio(
-      portfolio.filter((element) => {
-        return element.name !== item.name;
-      })
-    );
+  const handlePortfolioDelete = (e: any) => {
+    // e.preventDefault();
+    portfolioDeleteAPI(e).then((response) => {
+      if (response?.status == 200) {
+        toast.success("Stock deleted from portfolio!");
+        getPortfolio();
+      }
+    });
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,12 +58,30 @@ const SearchPage = (props: Props) => {
     // console.log(e);
   };
 
-  const onPortfolioCreate = (e: SyntheticEvent, result: CompanySearch) => {
-    // console.log(e);
-    if (!portfolio.find((item) => item.name === result.name)) {
-      setPortfolio([...portfolio, result]);
-    }
-    console.log(portfolio);
+  const getPortfolio = () => {
+    portfolioGetAPI()
+      .then((response) => {
+        if (response?.data) {
+          setPortfolio(response?.data);
+        }
+      })
+      .catch((e) => {
+        toast.warning("Could not get portfolio values!");
+      });
+  };
+
+  const onPortfolioCreate = (e: any, item: any) => {
+    e.preventDefault();
+    portfolioAddAPI(item)
+      .then((response) => {
+        if (response?.status === 204) {
+          toast.success("Stock added to portfolio!");
+          getPortfolio();
+        }
+      })
+      .catch((e) => {
+        toast.warning("Could not create portfolio item!");
+      });
   };
 
   const handleSearchSubmit = async (e: SyntheticEvent) => {
@@ -68,9 +98,9 @@ const SearchPage = (props: Props) => {
         handleSearchChange={handleSearchChange}
       />
       {serverError && <h1>{serverError}</h1>}
-      {portfolio.length > 0 && (
+      {portfolio!.length > 0 && (
         <ListPortfolio
-          portfolio={portfolio}
+          portfolio={portfolio!}
           onPortfolioDelete={handlePortfolioDelete}
         />
       )}

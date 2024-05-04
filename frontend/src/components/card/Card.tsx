@@ -23,7 +23,7 @@ const Card = ({ id, result, onPortfolioCreate }: Props) => {
       >
         {result.name} ({result.symbol})
       </Link>
-      <p className="text-black">{result.currency}</p>
+      <p className="text-black px-2">{result.currency}</p>
       <p className="font-bold text-black">
         {result.exchangeShortName} - {result.stockExchange}
       </p>
