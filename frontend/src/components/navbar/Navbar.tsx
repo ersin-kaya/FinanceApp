@@ -21,8 +21,10 @@ const Navbar = (props: Props) => {
           </div>
         </div>
         {isLoggedIn() ? (
-          <div className="hidden lg:flex items-center space-x-6 text-back">
-            <div className="hover:text-darkBlue">Welcome, {user?.userName}</div>
+          <div className="flex flex-col md:flex-row items-center space-x-6">
+            <div className="py-3 ms-5 max-w-64 truncate hover:text-darkBlue">
+              Welcome, {user?.userName}
+            </div>
             <a
               onClick={logout}
               className="px-8 py-3 font-bold rounded text-white bg-lightGreen hover:opacity-70"
@@ -31,8 +33,8 @@ const Navbar = (props: Props) => {
             </a>
           </div>
         ) : (
-          <div className="hidden lg:flex items-center space-x-6 text-back">
-            <Link to="/login" className="hover:text-darkBlue">
+          <div className="flex flex-col md:flex-row items-center space-x-6">
+            <Link to="/login" className="py-3 ms-5 hover:text-darkBlue">
               Login
             </Link>
             <Link
