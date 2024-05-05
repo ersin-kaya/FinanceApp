@@ -10,7 +10,7 @@ interface Props {
 
 const CardList = ({ searchResult, onPortfolioCreate }: Props) => {
   return (
-    <>
+    <div className="flex flex-col items-center my-16">
       {searchResult.length > 0 ? (
         searchResult.map((result) => {
           return (
@@ -27,7 +27,7 @@ const CardList = ({ searchResult, onPortfolioCreate }: Props) => {
           Search results: Nothing found!
         </p>
       )}
-    </>
+    </div>
   );
 };
 export default CardList;

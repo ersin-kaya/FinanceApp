@@ -13,21 +13,25 @@ interface Props {
 const Card = ({ id, result, onPortfolioCreate }: Props) => {
   return (
     <div
-      className="flex flex-col items-center justify-between w-full p-6 bg-slate-100 rounded-lg md:flex-row"
+      className="flex flex-col items-center justify-between w-full my-2 lg:w-10/12 xl:w-8/12 p-6 bg-slate-200 hover:bg-slate-300 rounded-lg lg:flex-row"
       key={id}
       id={id}
     >
-      <Link
-        to={`/company/${result.symbol}/company-profile`}
-        className="font-bold text-center text-black md:text-left"
-      >
-        {result.name} ({result.symbol})
-      </Link>
-      <p className="text-black px-2">{result.currency}</p>
-      <p className="font-bold text-black">
-        {result.exchangeShortName} - {result.stockExchange}
-      </p>
-      <AddPortfolio onPortfolioCreate={onPortfolioCreate} result={result} />
+      <div>
+        <Link
+          to={`/company/${result.symbol}/company-profile`}
+          className="font-bold text-center text-black md:text-left"
+        >
+          {result.name} - ({result.symbol})
+        </Link>
+        <p className="text-black">
+          {result.exchangeShortName} - {result.stockExchange}
+        </p>
+        <p className="font-bold text-black">{result.currency}</p>
+      </div>
+      <div>
+        <AddPortfolio onPortfolioCreate={onPortfolioCreate} result={result} />
+      </div>
     </div>
   );
 };
