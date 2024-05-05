@@ -7,4 +7,8 @@ export type PortfolioGetModel = {
   industry: string;
   marketCap: number;
   comments: any;
+  currency: string;
+  exchangeShortName: string;
+  name: string;
+  stockExchange: string;
 };
