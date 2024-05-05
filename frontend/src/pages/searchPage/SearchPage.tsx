@@ -19,6 +19,8 @@ const SearchPage = (props: Props) => {
   const [portfolio, setPortfolio] = useState<PortfolioGetModel[] | null>([]);
   const [serverError, setServerError] = useState<string>("");
   const [searchResult, setSearchResult] = useState<CompanySearch[]>([]);
+  const [portfolioListLoading, setPortfolioListLoading] =
+    useState<boolean>(true);
 
   useEffect(() => {
     getPortfolio();
@@ -59,15 +61,21 @@ const SearchPage = (props: Props) => {
   };
 
   const getPortfolio = () => {
-    portfolioGetAPI()
-      .then((response) => {
-        if (response?.data) {
-          setPortfolio(response?.data);
-        }
-      })
-      .catch((e) => {
-        toast.warning("Could not get portfolio values!");
-      });
+    setPortfolioListLoading(true);
+
+    setTimeout(() => {
+      portfolioGetAPI()
+        .then((response) => {
+          if (response?.data) {
+            setPortfolioListLoading(false);
+            setPortfolio(response.data);
+          }
+        })
+        .catch((e) => {
+          setPortfolioListLoading(false);
+          toast.warning("Could not get portfolio values!");
+        });
+    }, 300);
   };
 
   const onPortfolioCreate = (e: any, item: any) => {
@@ -102,6 +110,7 @@ const SearchPage = (props: Props) => {
         <ListPortfolio
           portfolio={portfolio!}
           onPortfolioDelete={handlePortfolioDelete}
+          loading={portfolioListLoading}
         />
       )}
       <CardList
