@@ -8,7 +8,7 @@ const RatioList = ({ config, data }: Props) => {
     return (
       <li className="py-3 sm:py-4">
         <div className="flex items-center space-x-4">
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 me-28">
             <p className="text-sm font-medium text-gray-900 truncate">
               {row.label}
             </p>
@@ -25,7 +25,7 @@ const RatioList = ({ config, data }: Props) => {
   });
 
   return (
-    <div className="bg-white shadow rounded-lg m-4 p-4 sm:p-6 w-full h-full">
+    <div className="bg-white shadow rounded-lg my-4 p-4 sm:p-6 w-full h-full">
       <ul className="divide-y divided-gray-200">{renderedCells}</ul>
     </div>
   );
