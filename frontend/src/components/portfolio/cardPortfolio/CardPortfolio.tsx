@@ -9,7 +9,7 @@ interface Props {
 }
 
 const CardPortfolio = ({ item, onPortfolioDelete }: Props) => {
-  console.log(item);
+  // console.log(item);
   return (
     <div className="flex flex-col justify-between w-full p-8 space-y-4 text-center rounded-lg shadow-lg md:my-10 lg:[width:30%] [height:250px]">
       <Link

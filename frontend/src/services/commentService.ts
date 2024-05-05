@@ -3,7 +3,7 @@ import { CommentPostModel } from "../models/commentPostModel";
 import { handleError } from "../helpers/errorHandler";
 import { CommentGetModel } from "../models/commentGetModel";
 
-const api = "http://localhost:5189/api/comment/";
+const api = "https://api.financeapp.ersinkaya.dev/api/comment/";
 
 export const postCommentAPI = async (
   title: string,
