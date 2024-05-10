@@ -4,7 +4,7 @@ import { handleError } from "../helpers/errorHandler";
 import { PortfolioDeleteModel } from "../models/portfolioDeleteModel";
 import { PortfolioGetModel } from "../models/portfolioGetModel";
 
-const api = "https://api.financeapp.ersinkaya.dev/api/portfolio";
+const api = "http://localhost:5189/api/portfolio";
 
 export const portfolioGetAPI = async () => {
   try {

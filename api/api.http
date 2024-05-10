@@ -1,4 +1,4 @@
-@api_HostAddress = https://api.financeapp.ersinkaya.dev
+@api_HostAddress = http://localhost:5189
 
 GET {{api_HostAddress}}/weatherforecast/
 Accept: application/json
