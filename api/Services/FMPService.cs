@@ -8,7 +8,7 @@ using api.Mappers;
 using api.Models;
 using Newtonsoft.Json;
 
-namespace api.Service
+namespace api.Services
 {
     public class FMPService : IFMPService
     {
