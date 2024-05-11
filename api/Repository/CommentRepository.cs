@@ -43,7 +43,7 @@ namespace api.Repository
         {
             var comments = _context.Comments.Include(a => a.AppUser).AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
+            if (QueryHelper.IsStringValid(queryObject.Symbol))
             {
                 comments = comments.Where(s => s.Stock.Symbol == queryObject.Symbol);
             }

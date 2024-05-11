@@ -19,17 +19,17 @@ namespace api.Services
         {
             var stocks = await _stockRepository.GetAllAsync(stockQuery);
             
-            if (!string.IsNullOrWhiteSpace(stockQuery.CompanyName))
+            if (QueryHelper.IsStringValid(stockQuery.CompanyName))
             {
                 stocks = stocks.Where(s => s.CompanyName.Contains(stockQuery.CompanyName));
             }
             
-            if (!string.IsNullOrWhiteSpace(stockQuery.Symbol))
+            if (QueryHelper.IsStringValid(stockQuery.Symbol))
             {
                 stocks = stocks.Where(s => s.Symbol.Contains(stockQuery.Symbol));
             }
             
-            if (!string.IsNullOrWhiteSpace(stockQuery.SortBy))
+            if (QueryHelper.IsStringValid(stockQuery.SortBy))
             {
                 if (stockQuery.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
                 {
