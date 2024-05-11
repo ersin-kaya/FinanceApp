@@ -19,7 +19,6 @@ namespace api.Repository
         {
             await _context.Comments.AddAsync(commentModel);
             await _context.SaveChangesAsync();
-
             return commentModel;
         }
 
@@ -34,26 +33,13 @@ namespace api.Repository
 
             _context.Comments.Remove(commentModel);
             await _context.SaveChangesAsync();
-
             return commentModel;
 
         }
 
-        public async Task<List<Comment>> GetAllAsync(CommentQueryObject queryObject)
+        public async Task<IQueryable<Comment>> GetAllAsync()
         {
-            var comments = _context.Comments.Include(a => a.AppUser).AsQueryable();
-
-            if (QueryHelper.IsStringValid(queryObject.Symbol))
-            {
-                comments = comments.Where(s => s.Stock.Symbol == queryObject.Symbol);
-            }
-
-            if (queryObject.IsDescending == true)
-            {
-                comments = comments.OrderByDescending(c => c.CreatedOn);
-            }
-
-            return await comments.ToListAsync();
+            return await Task.FromResult(_context.Comments.Include(a => a.AppUser).AsQueryable());
         }
 
         public async Task<Comment?> GetByIdAsync(int id)
@@ -74,7 +60,6 @@ namespace api.Repository
             existingComment.Content = commentModel.Content;
 
             await _context.SaveChangesAsync();
-
             return existingComment;
         }
     }

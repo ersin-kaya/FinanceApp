@@ -8,6 +8,7 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +19,15 @@ namespace api.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
-        private readonly ICommentRepository _commentRepository;
-        private readonly IStockRepository _stockRepository;
+        private readonly ICommentService _commentService;
+        private readonly IStockService _stockService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IFMPService _fmpService;
 
-        public CommentController(ICommentRepository commentRepository, IStockRepository stockRepository, UserManager<AppUser> userManager, IFMPService fmpService)
+        public CommentController(ICommentService commentService, IStockService stockService, UserManager<AppUser> userManager, IFMPService fmpService)
         {
-            _commentRepository = commentRepository;
-            _stockRepository = stockRepository;
+            _commentService = commentService;
+            _stockService = stockService;
             _userManager = userManager;
             _fmpService = fmpService;
         }
@@ -40,7 +41,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var comments = await _commentRepository.GetAllAsync(queryObject);
+            var comments = await _commentService.GetAllAsync(queryObject);
 
             var commentDto = comments.Select(s => s.ToCommentDto());
 
@@ -55,7 +56,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var comment = await _commentRepository.GetByIdAsync(id);
+            var comment = await _commentService.GetByIdAsync(id);
 
             if (comment == null)
             {
@@ -73,7 +74,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stock = await _stockRepository.GetBySymbolAsync(symbol);
+            var stock = await _stockService.GetBySymbolAsync(symbol);
 
             if (stock == null)
             {
@@ -84,7 +85,7 @@ namespace api.Controllers
                 }
                 else
                 {
-                    await _stockRepository.CreateAsync(stock);
+                    await _stockService.CreateAsync(stock);
                 }
             }
 
@@ -94,7 +95,7 @@ namespace api.Controllers
             var commentModel = commentDto.ToCommentFromCreate(stock.Id);
             commentModel.AppUserId = appUser.Id;
 
-            await _commentRepository.CreateAsync(commentModel);
+            await _commentService.CreateAsync(commentModel);
 
             return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
         }
@@ -108,7 +109,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var comment = await _commentRepository.UpdateAsync(id, updateDto.ToCommentFromUpdate());
+            var comment = await _commentService.UpdateAsync(id, updateDto.ToCommentFromUpdate());
 
             if (comment == null)
             {
@@ -127,7 +128,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var commentModel = await _commentRepository.DeleteAsync(id);
+            var commentModel = await _commentService.DeleteAsync(id);
 
             if (commentModel == null)
             {
