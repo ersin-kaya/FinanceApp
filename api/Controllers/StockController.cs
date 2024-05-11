@@ -7,6 +7,7 @@ using api.Dtos.Stock;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
+using api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +19,11 @@ namespace api.Controllers
     [Authorize]
     public class StockController : ControllerBase
     {
-        private readonly IStockRepository _stockRepository;
+        private readonly IStockService _stockService;
 
-        public StockController(IStockRepository stockRepository)
+        public StockController(IStockService stockService)
         {
-            _stockRepository = stockRepository;
+            _stockService = stockService;
         }
 
         [HttpGet]
@@ -33,10 +34,9 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stocks = await _stockRepository.GetAllAsync(query);
-
+            var stocks = await _stockService.GetAllAsync(query);
             var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
-
+            
             return Ok(stockDto);
         }
 
@@ -48,7 +48,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stock = await _stockRepository.GetByIdAsync(id);
+            var stock = await _stockService.GetByIdAsync(id);
 
             if (stock == null)
             {
@@ -68,7 +68,7 @@ namespace api.Controllers
 
             var stockModel = stockDto.ToStockFromCreateDTO();
 
-            await _stockRepository.CreateAsync(stockModel);
+            await _stockService.CreateAsync(stockModel);
 
             return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
         }
@@ -82,7 +82,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stockModel = await _stockRepository.UpdateAsync(id, updateDto);
+            var stockModel = await _stockService.UpdateAsync(id, updateDto);
 
             if (stockModel == null)
             {
@@ -101,7 +101,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stockModel = await _stockRepository.DeleteAsync(id);
+            var stockModel = await _stockService.DeleteAsync(id);
 
             if (stockModel == null)
             {
