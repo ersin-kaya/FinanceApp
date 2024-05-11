@@ -17,7 +17,7 @@ namespace api.Services
         
         public async Task<List<Stock>> GetAllAsync(StockQueryObject stockQuery)
         {
-            var stocks = await _stockRepository.GetAllAsync(stockQuery);
+            var stocks = await _stockRepository.GetAllAsync();
             
             if (QueryHelper.IsStringValid(stockQuery.CompanyName))
             {

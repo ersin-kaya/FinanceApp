@@ -40,7 +40,7 @@ namespace api.Repository
             return stockModel;
         }
 
-        public async Task<IQueryable<Stock>> GetAllAsync(StockQueryObject stockQuery)
+        public async Task<IQueryable<Stock>> GetAllAsync()
         {
             return await Task.FromResult(_context.Stocks.Include(c => c.Comments).ThenInclude(a => a.AppUser).AsQueryable());
         }
