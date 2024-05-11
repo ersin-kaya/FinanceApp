@@ -15,31 +15,31 @@ namespace api.Services
             _stockRepository = stockRepository;
         }
         
-        public async Task<List<Stock>> GetAllAsync(QueryObject query)
+        public async Task<List<Stock>> GetAllAsync(StockQueryObject stockQuery)
         {
-            var stocks = await _stockRepository.GetAllAsync(query);
+            var stocks = await _stockRepository.GetAllAsync(stockQuery);
             
-            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            if (!string.IsNullOrWhiteSpace(stockQuery.CompanyName))
             {
-                stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
+                stocks = stocks.Where(s => s.CompanyName.Contains(stockQuery.CompanyName));
             }
             
-            if (!string.IsNullOrWhiteSpace(query.Symbol))
+            if (!string.IsNullOrWhiteSpace(stockQuery.Symbol))
             {
-                stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
+                stocks = stocks.Where(s => s.Symbol.Contains(stockQuery.Symbol));
             }
             
-            if (!string.IsNullOrWhiteSpace(query.SortBy))
+            if (!string.IsNullOrWhiteSpace(stockQuery.SortBy))
             {
-                if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+                if (stockQuery.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
                 {
-                    stocks = query.IsDecsending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
+                    stocks = stockQuery.IsDecsending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
                 }
             }
             
-            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            var skipNumber = (stockQuery.PageNumber - 1) * stockQuery.PageSize;
             
-            return await stocks.Skip(skipNumber).Take(query.PageSize).ToListAsync();
+            return await stocks.Skip(skipNumber).Take(stockQuery.PageSize).ToListAsync();
         }
 
         public Task<Stock?> GetByIdAsync(int id)

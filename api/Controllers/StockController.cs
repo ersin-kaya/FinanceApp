@@ -27,14 +27,14 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
+        public async Task<IActionResult> GetAll([FromQuery] StockQueryObject stockQuery)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var stocks = await _stockService.GetAllAsync(query);
+            var stocks = await _stockService.GetAllAsync(stockQuery);
             var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
             
             return Ok(stockDto);
