@@ -79,19 +79,21 @@ namespace api.Controllers
             if (stock == null)
             {
                 stock = await _fmpService.FindStockBySymbolAsync(symbol);
+                
                 if (stock == null)
                 {
                     return BadRequest("Stock does not exists");
                 }
                 else
                 {
-                    await _stockService.CreateAsync(stock);
+                    await _stockService.CreateAsync(stock.ToCreateDTOFromStockDTO());
                 }
             }
 
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
 
+            stock = await _stockService.GetBySymbolAsync(symbol);
             var commentModel = commentDto.ToCommentFromCreate(stock.Id);
             commentModel.AppUserId = appUser.Id;
 

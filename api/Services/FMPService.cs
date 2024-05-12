@@ -21,7 +21,7 @@ namespace api.Services
             _configuration = configuration;
         }
 
-        public async Task<Stock> FindStockBySymbolAsync(string symbol)
+        public async Task<StockDto> FindStockBySymbolAsync(string symbol)
         {
             try
             {

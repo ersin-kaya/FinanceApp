@@ -36,10 +36,23 @@ namespace api.Mappers
                 MarketCap = stockDto.MarketCap
             };
         }
-
-        public static Stock ToStockFromFMP(this FMPStock fMPStock)
+        
+        public static CreateStockRequestDto ToCreateDTOFromStockDTO(this StockDto stockDto)
         {
-            return new Stock
+            return new CreateStockRequestDto
+            {
+                Symbol = stockDto.Symbol,
+                CompanyName = stockDto.CompanyName,
+                Purchase = stockDto.Purchase,
+                LastDiv = stockDto.LastDiv,
+                Industry = stockDto.Industry,
+                MarketCap = stockDto.MarketCap
+            };
+        }
+
+        public static StockDto ToStockFromFMP(this FMPStock fMPStock)
+        {
+            return new StockDto
             {
                 Symbol = fMPStock.Symbol,
                 CompanyName = fMPStock.CompanyName,

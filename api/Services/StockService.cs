@@ -1,6 +1,7 @@
 using api.Dtos.Stock;
 using api.Helpers;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace api.Services
             _stockRepository = stockRepository;
         }
         
-        public async Task<List<Stock>> GetAllAsync(StockQueryObject stockQuery)
+        public async Task<List<StockDto>> GetAllAsync(StockQueryObject stockQuery)
         {
             var stocks = await _stockRepository.GetAllAsync();
             
@@ -38,33 +39,40 @@ namespace api.Services
             }
             
             var skipNumber = (stockQuery.PageNumber - 1) * stockQuery.PageSize;
-            
-            return await stocks.Skip(skipNumber).Take(stockQuery.PageSize).ToListAsync();
+            var pagedStocks = await stocks.Skip(skipNumber).Take(stockQuery.PageSize).ToListAsync();
+            var stockDtos = pagedStocks.Select(s=>s.ToStockDto()).ToList();
+
+            return stockDtos;
         }
 
-        public Task<Stock?> GetByIdAsync(int id)
+        public async Task<StockDto?> GetByIdAsync(int id)
         {
-            return _stockRepository.GetByIdAsync(id);
+            var stockDto = (await _stockRepository.GetByIdAsync(id)).ToStockDto();
+            return stockDto;
         }
 
-        public Task<Stock?> GetBySymbolAsync(string symbol)
+        public async Task<StockDto?> GetBySymbolAsync(string symbol)
         {
-            return _stockRepository.GetBySymbolAsync(symbol);
+            var stockDto = (await _stockRepository.GetBySymbolAsync(symbol)).ToStockDto();
+            return stockDto;
         }
 
-        public Task<Stock> CreateAsync(Stock stockModel)
+        public async Task<StockDto> CreateAsync(CreateStockRequestDto createStockRequestDto)
         {
-            return _stockRepository.CreateAsync(stockModel);
+            var stockDto = (await _stockRepository.CreateAsync(createStockRequestDto.ToStockFromCreateDTO())).ToStockDto();
+            return stockDto;
         }
 
-        public Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto)
+        public async Task<StockDto?> UpdateAsync(int id, UpdateStockRequestDto updateStockRequestDto)
         {
-            return _stockRepository.UpdateAsync(id, stockDto);
+            var stockDto = (await _stockRepository.UpdateAsync(id, updateStockRequestDto)).ToStockDto();
+            return stockDto;
         }
 
-        public Task<Stock?> DeleteAsync(int id)
+        public async Task<StockDto?> DeleteAsync(int id)
         {
-            return _stockRepository.DeleteAsync(id);
+            var stockDto = (await _stockRepository.DeleteAsync(id)).ToStockDto();
+            return stockDto;
         }
 
         public Task<bool> StockExists(int id)

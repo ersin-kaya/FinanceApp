@@ -35,9 +35,8 @@ namespace api.Controllers
             }
 
             var stocks = await _stockService.GetAllAsync(stockQuery);
-            var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
             
-            return Ok(stockDto);
+            return Ok(stocks);
         }
 
         [HttpGet("{id:int}")]
@@ -55,7 +54,7 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return Ok(stock.ToStockDto());
+            return Ok(stock);
         }
 
         [HttpPost]
@@ -68,7 +67,7 @@ namespace api.Controllers
 
             var stockModel = stockDto.ToStockFromCreateDTO();
 
-            await _stockService.CreateAsync(stockModel);
+            await _stockService.CreateAsync(stockDto);
 
             return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
         }
@@ -89,7 +88,7 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return Ok(stockModel.ToStockDto());
+            return Ok(stockModel);
         }
 
         [HttpDelete]

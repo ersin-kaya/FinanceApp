@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Extensions;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -49,13 +50,14 @@ namespace api.Controllers
             if (stock == null)
             {
                 stock = await _fmpService.FindStockBySymbolAsync(symbol);
+                
                 if (stock == null)
                 {
                     return BadRequest("Stock does not exists");
                 }
                 else
                 {
-                    await _stockService.CreateAsync(stock);
+                    await _stockService.CreateAsync(stock.ToCreateDTOFromStockDTO());
                 }
             }
 
@@ -71,6 +73,7 @@ namespace api.Controllers
                 return BadRequest("Cannot add same stock to portfolio");
             }
 
+            stock = await _stockService.GetBySymbolAsync(symbol);
             var portfolioModel = new Portfolio
             {
                 StockId = stock.Id,

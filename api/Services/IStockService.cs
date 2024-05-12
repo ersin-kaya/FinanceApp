@@ -6,12 +6,12 @@ namespace api.Services
 {
     public interface IStockService
     {
-        Task<List<Stock>> GetAllAsync(StockQueryObject stockQuery);
-        Task<Stock?> GetByIdAsync(int id);
-        Task<Stock?> GetBySymbolAsync(string symbol);
-        Task<Stock> CreateAsync(Stock stockModel);
-        Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto);
-        Task<Stock?> DeleteAsync(int id);
+        Task<List<StockDto>> GetAllAsync(StockQueryObject stockQuery);
+        Task<StockDto?> GetByIdAsync(int id);
+        Task<StockDto?> GetBySymbolAsync(string symbol);
+        Task<StockDto> CreateAsync(CreateStockRequestDto createStockRequestDto);
+        Task<StockDto?> UpdateAsync(int id, UpdateStockRequestDto updateStockRequestDto);
+        Task<StockDto?> DeleteAsync(int id);
         Task<bool> StockExists(int id);
     }
 }
