@@ -1,8 +1,10 @@
 using api.Dtos.Comment;
+using api.Extensions;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services;
@@ -10,10 +12,14 @@ namespace api.Services;
 public class CommentService : ICommentService
 {
     public readonly ICommentRepository _commentRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly UserManager<AppUser> _userManager;
 
-    public CommentService(ICommentRepository commentRepository)
+    public CommentService(ICommentRepository commentRepository, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
     {
         _commentRepository = commentRepository;
+        _httpContextAccessor = httpContextAccessor;
+        _userManager = userManager;
     }
 
     public async Task<List<CommentDto>> GetAllAsync(CommentQueryObject queryObject)
@@ -35,23 +41,38 @@ public class CommentService : ICommentService
         return await commentDtos.ToListAsync();
     }
 
-    public Task<Comment?> GetByIdAsync(int id)
+    public async Task<CommentDto?> GetByIdAsync(int id)
     {
-        return _commentRepository.GetByIdAsync(id);
+        return (await _commentRepository.GetByIdAsync(id)).ToCommentDto();
     }
 
-    public Task<Comment> CreateAsync(Comment commentModel)
+    public async Task<CommentDto> CreateAsync(Comment commentModel)
     {
-        return _commentRepository.CreateAsync(commentModel);
+        return (await _commentRepository.CreateAsync(commentModel)).ToCommentDto();
     }
 
-    public Task<Comment?> UpdateAsync(int id, Comment commentModel)
+    public async Task<CommentDto?> UpdateAsync(int id, Comment commentModel)
     {
-        return _commentRepository.UpdateAsync(id, commentModel);
+        var appUser = await GetUser();
+        commentModel.AppUser = appUser;
+        
+        return (await _commentRepository.UpdateAsync(id, commentModel)).ToCommentDto();
     }
 
-    public Task<Comment?> DeleteAsync(int id)
+    public async Task<CommentDto?> DeleteAsync(int id)
     {
-        return _commentRepository.DeleteAsync(id);
+        var appUser = await GetUser();
+
+        var result = (await _commentRepository.DeleteAsync(id));
+        result.AppUser = appUser;
+        
+        return result.ToCommentDto();
+    }
+
+    private async Task<AppUser?> GetUser()
+    {
+        var username = _httpContextAccessor.HttpContext.User.GetUsername();
+        var appUser = await _userManager.FindByNameAsync(username);
+        return appUser;
     }
 }

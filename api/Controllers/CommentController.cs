@@ -61,7 +61,7 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return Ok(comment.ToCommentDto());
+            return Ok(comment);
         }
 
         [HttpPost("{symbol:alpha}")]
@@ -116,7 +116,7 @@ namespace api.Controllers
                 return NotFound("Comment not found");
             }
 
-            return Ok(comment.ToCommentDto());
+            return Ok(comment);
         }
 
         [HttpDelete]
@@ -128,14 +128,14 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var commentModel = await _commentService.DeleteAsync(id);
+            var comment = await _commentService.DeleteAsync(id);
 
-            if (commentModel == null)
+            if (comment == null)
             {
                 return NotFound("Comment does not exist");
             }
 
-            return Ok(commentModel);
+            return Ok(comment);
         }
     }
 }
