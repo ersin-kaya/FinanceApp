@@ -1,5 +1,7 @@
+using api.Dtos.Comment;
 using api.Helpers;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +16,7 @@ public class CommentService : ICommentService
         _commentRepository = commentRepository;
     }
 
-    public async Task<List<Comment>> GetAllAsync(CommentQueryObject queryObject)
+    public async Task<List<CommentDto>> GetAllAsync(CommentQueryObject queryObject)
     {
         var comments = await _commentRepository.GetAllAsync();
         
@@ -27,8 +29,10 @@ public class CommentService : ICommentService
         {
             comments = comments.OrderByDescending(c => c.CreatedOn);
         }
+
+        var commentDtos = comments.Select(c => c.ToCommentDto());
         
-        return await comments.ToListAsync();
+        return await commentDtos.ToListAsync();
     }
 
     public Task<Comment?> GetByIdAsync(int id)

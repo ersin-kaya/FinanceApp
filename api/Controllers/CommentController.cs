@@ -43,9 +43,7 @@ namespace api.Controllers
 
             var comments = await _commentService.GetAllAsync(queryObject);
 
-            var commentDto = comments.Select(s => s.ToCommentDto());
-
-            return Ok(commentDto);
+            return Ok(comments);
         }
 
         [HttpGet("{id:int}")]
