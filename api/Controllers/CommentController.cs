@@ -65,7 +65,7 @@ namespace api.Controllers
         }
 
         [HttpPost("{symbol:alpha}")]
-        public async Task<IActionResult> Create([FromRoute] string symbol, CreateCommentDto commentDto)
+        public async Task<IActionResult> Create([FromRoute] string symbol, CreateCommentDto createCommentDto)
         {
             if (!ModelState.IsValid)
             {
@@ -92,11 +92,13 @@ namespace api.Controllers
             var appUser = await _userManager.FindByNameAsync(username);
 
             stock = await _stockService.GetBySymbolAsync(symbol);
-            var commentModel = commentDto.ToCommentFromCreate(stock.Id);
+            var commentModel = createCommentDto.ToCommentFromCreate(stock.Id);
             commentModel.AppUserId = appUser.Id;
+            commentModel.AppUser = appUser;
 
-            await _commentService.CreateAsync(commentModel);
-
+            var commentDto = commentModel.ToCommentDto();
+            await _commentService.CreateAsync(commentDto);
+            
             return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
         }
 
@@ -108,8 +110,8 @@ namespace api.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var comment = await _commentService.UpdateAsync(id, updateDto.ToCommentFromUpdate());
+            
+            var comment = await _commentService.UpdateAsync(id, updateDto.ToCommentDTOFromUpdate());
 
             if (comment == null)
             {

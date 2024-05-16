@@ -46,17 +46,17 @@ public class CommentService : ICommentService
         return (await _commentRepository.GetByIdAsync(id)).ToCommentDto();
     }
 
-    public async Task<CommentDto> CreateAsync(Comment commentModel)
+    public async Task<CommentDto> CreateAsync(CommentDto commentModel)
     {
-        return (await _commentRepository.CreateAsync(commentModel)).ToCommentDto();
+        return (await _commentRepository.CreateAsync(commentModel.ToComment())).ToCommentDto();
     }
 
-    public async Task<CommentDto?> UpdateAsync(int id, Comment commentModel)
+    public async Task<CommentDto?> UpdateAsync(int id, CommentDto commentDto)
     {
         var appUser = await GetUser();
-        commentModel.AppUser = appUser;
+        commentDto.AppUser = appUser;
         
-        return (await _commentRepository.UpdateAsync(id, commentModel)).ToCommentDto();
+        return (await _commentRepository.UpdateAsync(id, commentDto.ToComment())).ToCommentDto();
     }
 
     public async Task<CommentDto?> DeleteAsync(int id)
