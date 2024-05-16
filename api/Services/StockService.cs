@@ -53,8 +53,17 @@ namespace api.Services
 
         public async Task<StockDto?> GetBySymbolAsync(string symbol)
         {
-            var stockDto = (await _stockRepository.GetBySymbolAsync(symbol)).ToStockDto();
-            return stockDto;
+            var stock = (await _stockRepository.GetBySymbolAsync(symbol));
+            
+            try
+            {
+                var stockDto = stock.ToStockDto();
+                return stockDto;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         public async Task<StockDto> CreateAsync(CreateStockRequestDto createStockRequestDto)

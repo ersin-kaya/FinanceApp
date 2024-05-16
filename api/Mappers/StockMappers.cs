@@ -26,28 +26,42 @@ namespace api.Mappers
 
         public static Stock ToStockFromCreateDTO(this CreateStockRequestDto stockDto)
         {
-            return new Stock
+            try
             {
-                Symbol = stockDto.Symbol,
-                CompanyName = stockDto.CompanyName,
-                Purchase = stockDto.Purchase,
-                LastDiv = stockDto.LastDiv,
-                Industry = stockDto.Industry,
-                MarketCap = stockDto.MarketCap
-            };
+                return new Stock
+                {
+                    Symbol = stockDto.Symbol,
+                    CompanyName = stockDto.CompanyName,
+                    Purchase = stockDto.Purchase,
+                    LastDiv = stockDto.LastDiv,
+                    Industry = stockDto.Industry,
+                    MarketCap = stockDto.MarketCap
+                };
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
         
         public static CreateStockRequestDto ToCreateDTOFromStockDTO(this StockDto stockDto)
         {
-            return new CreateStockRequestDto
+            try
             {
-                Symbol = stockDto.Symbol,
-                CompanyName = stockDto.CompanyName,
-                Purchase = stockDto.Purchase,
-                LastDiv = stockDto.LastDiv,
-                Industry = stockDto.Industry,
-                MarketCap = stockDto.MarketCap
-            };
+                return new CreateStockRequestDto
+                {
+                    Symbol = stockDto.Symbol,
+                    CompanyName = stockDto.CompanyName,
+                    Purchase = stockDto.Purchase,
+                    LastDiv = stockDto.LastDiv,
+                    Industry = stockDto.Industry,
+                    MarketCap = stockDto.MarketCap
+                };
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         public static StockDto ToStockFromFMP(this FMPStock fMPStock)

@@ -1,4 +1,7 @@
+using api.Dtos.Portfolio;
+using api.Dtos.Stock;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 
 namespace api.Services;
@@ -12,18 +15,19 @@ public class PortfolioService : IPortfolioService
         _portfolioRepository = portfolioRepository;
     }
 
-    public Task<List<Stock>> GetUserPortfolio(AppUser user)
+    public async Task<List<StockDto>> GetUserPortfolio(AppUser user)
     {
-        return _portfolioRepository.GetUserPortfolio(user);
+        var stockDtos = (await _portfolioRepository.GetUserPortfolio(user)).Select(s=>s.ToStockDto()).ToList();
+        return stockDtos;
     }
 
-    public Task<Portfolio> CreateAsync(Portfolio portfolio)
+    public async Task<PortfolioDto> CreateAsync(PortfolioDto portfolioDto)
     {
-        return _portfolioRepository.CreateAsync(portfolio);
+        return (await _portfolioRepository.CreateAsync(portfolioDto.ToPortfolio())).ToPortfolioDto();
     }
 
-    public Task<Portfolio> DeletePortfolio(AppUser appUser, string symbol)
+    public async Task<PortfolioDto> DeletePortfolio(AppUser appUser, string symbol)
     {
-        return _portfolioRepository.DeletePortfolio(appUser, symbol);
+        return (await _portfolioRepository.DeletePortfolio(appUser, symbol)).ToPortfolioDto();
     }
 }

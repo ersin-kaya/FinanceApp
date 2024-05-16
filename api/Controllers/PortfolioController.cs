@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.Portfolio;
 using api.Extensions;
 using api.Interfaces;
 using api.Mappers;
@@ -72,12 +73,12 @@ namespace api.Controllers
             {
                 return BadRequest("Cannot add same stock to portfolio");
             }
-
-            stock = await _stockService.GetBySymbolAsync(symbol);
-            var portfolioModel = new Portfolio
+            
+            var portfolioModel = new PortfolioDto()
             {
                 StockId = stock.Id,
-                AppUserId = appUser.Id
+                AppUserId = appUser.Id,
+                AppUser = appUser,
             };
 
             await _portfolioService.CreateAsync(portfolioModel);
