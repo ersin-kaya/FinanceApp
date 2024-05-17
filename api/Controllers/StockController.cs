@@ -27,14 +27,14 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] StockQueryObject stockQuery)
+        public async Task<IActionResult> GetAll([FromQuery] StockQueryObject stockQueryObject)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var stocks = await _stockService.GetAllAsync(stockQuery);
+            var stocks = await _stockService.GetAllAsync(stockQueryObject);
             
             return Ok(stocks);
         }
@@ -72,21 +72,21 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateStockRequestDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var stockModel = await _stockService.UpdateAsync(id, updateDto);
+            var stock = await _stockService.UpdateAsync(id, updateStockRequestDto);
 
-            if (stockModel == null)
+            if (stock == null)
             {
                 return NotFound();
             }
 
-            return Ok(stockModel);
+            return Ok(stock);
         }
 
         [HttpDelete]
@@ -98,9 +98,9 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stockModel = await _stockService.DeleteAsync(id);
+            var stock = await _stockService.DeleteAsync(id);
 
-            if (stockModel == null)
+            if (stock == null)
             {
                 return NotFound();
             }
