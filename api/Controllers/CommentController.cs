@@ -34,14 +34,14 @@ namespace api.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAll([FromQuery] CommentQueryObject queryObject)
+        public async Task<IActionResult> GetAll([FromQuery] CommentQueryObject commentQueryObject)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var comments = await _commentService.GetAllAsync(queryObject);
+            var comments = await _commentService.GetAllAsync(commentQueryObject);
 
             return Ok(comments);
         }
@@ -92,26 +92,26 @@ namespace api.Controllers
             var appUser = await _userManager.FindByNameAsync(username);
 
             stock = await _stockService.GetBySymbolAsync(symbol);
-            var commentModel = createCommentDto.ToCommentFromCreate(stock.Id);
-            commentModel.AppUserId = appUser.Id;
-            commentModel.AppUser = appUser;
+            var comment = createCommentDto.ToCommentFromCreate(stock.Id);
+            comment.AppUserId = appUser.Id;
+            comment.AppUser = appUser;
 
-            var commentDto = commentModel.ToCommentDto();
+            var commentDto = comment.ToCommentDto();
             await _commentService.CreateAsync(commentDto);
             
-            return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
+            return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment.ToCommentDto());
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequestDto updateDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentRequestDto updateCommentRequestDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             
-            var comment = await _commentService.UpdateAsync(id, updateDto.ToCommentDTOFromUpdate());
+            var comment = await _commentService.UpdateAsync(id, updateCommentRequestDto.ToCommentDTOFromUpdate());
 
             if (comment == null)
             {
