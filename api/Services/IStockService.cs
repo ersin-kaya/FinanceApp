@@ -6,7 +6,7 @@ namespace api.Services
 {
     public interface IStockService
     {
-        Task<List<StockDto>> GetAllAsync(StockQueryObject stockQuery);
+        Task<List<StockDto>> GetAllAsync(StockQueryObject stockQueryObject);
         Task<StockDto?> GetByIdAsync(int id);
         Task<StockDto?> GetBySymbolAsync(string symbol);
         Task<StockDto> CreateAsync(CreateStockRequestDto createStockRequestDto);

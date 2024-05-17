@@ -16,30 +16,30 @@ namespace api.Services
             _stockRepository = stockRepository;
         }
         
-        public async Task<List<StockDto>> GetAllAsync(StockQueryObject stockQuery)
+        public async Task<List<StockDto>> GetAllAsync(StockQueryObject stockQueryObject)
         {
             var stocks = await _stockRepository.GetAllAsync();
             
-            if (QueryHelper.IsStringValid(stockQuery.CompanyName))
+            if (QueryHelper.IsStringValid(stockQueryObject.CompanyName))
             {
-                stocks = stocks.Where(s => s.CompanyName.Contains(stockQuery.CompanyName));
+                stocks = stocks.Where(s => s.CompanyName.Contains(stockQueryObject.CompanyName));
             }
             
-            if (QueryHelper.IsStringValid(stockQuery.Symbol))
+            if (QueryHelper.IsStringValid(stockQueryObject.Symbol))
             {
-                stocks = stocks.Where(s => s.Symbol.Contains(stockQuery.Symbol));
+                stocks = stocks.Where(s => s.Symbol.Contains(stockQueryObject.Symbol));
             }
             
-            if (QueryHelper.IsStringValid(stockQuery.SortBy))
+            if (QueryHelper.IsStringValid(stockQueryObject.SortBy))
             {
-                if (stockQuery.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+                if (stockQueryObject.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
                 {
-                    stocks = stockQuery.IsDecsending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
+                    stocks = stockQueryObject.IsDecsending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
                 }
             }
             
-            var skipNumber = (stockQuery.PageNumber - 1) * stockQuery.PageSize;
-            var pagedStocks = await stocks.Skip(skipNumber).Take(stockQuery.PageSize).ToListAsync();
+            var skipNumber = (stockQueryObject.PageNumber - 1) * stockQueryObject.PageSize;
+            var pagedStocks = await stocks.Skip(skipNumber).Take(stockQueryObject.PageSize).ToListAsync();
             var stockDtos = pagedStocks.Select(s=>s.ToStockDto()).ToList();
 
             return stockDtos;
@@ -68,7 +68,8 @@ namespace api.Services
 
         public async Task<StockDto> CreateAsync(CreateStockRequestDto createStockRequestDto)
         {
-            var stockDto = (await _stockRepository.CreateAsync(createStockRequestDto.ToStockFromCreateDTO())).ToStockDto();
+            var createdStock = await _stockRepository.CreateAsync(createStockRequestDto.ToStockFromCreateDTO());
+            var stockDto = createdStock.ToStockDto();
             return stockDto;
         }
 
