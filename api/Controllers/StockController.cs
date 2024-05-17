@@ -58,18 +58,16 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateStockRequestDto stockDto)
+        public async Task<IActionResult> Create([FromBody] CreateStockRequestDto createStockRequestDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var stockModel = stockDto.ToStockFromCreateDTO();
+            var createdStock = await _stockService.CreateAsync(createStockRequestDto);
 
-            await _stockService.CreateAsync(stockDto);
-
-            return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
+            return CreatedAtAction(nameof(GetById), new { id = createdStock.Id }, createdStock);
         }
 
         [HttpPut]
