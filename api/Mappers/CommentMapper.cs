@@ -60,6 +60,19 @@ namespace api.Mappers
             };
         }
 
+        public static CommentDto ToCommentDTOFromCreate(this CreateCommentDto createCommentDto, AppUser appUser, int stockId)
+        {
+            return new CommentDto()
+            {
+                AppUserId = appUser.Id,
+                StockId = stockId,
+                Title = createCommentDto.Title,
+                Content = createCommentDto.Content,
+                CreatedOn = DateTime.Now,
+                CreatedBy = appUser.UserName,
+            };
+        }
+
         public static Comment ToCommentFromUpdate(this UpdateCommentRequestDto commentDto)
         {
             return new Comment

@@ -92,14 +92,11 @@ namespace api.Controllers
             var appUser = await _userManager.FindByNameAsync(username);
 
             stock = await _stockService.GetBySymbolAsync(symbol);
-            var comment = createCommentDto.ToCommentFromCreate(stock.Id);
-            comment.AppUserId = appUser.Id;
-            comment.AppUser = appUser;
 
-            var commentDto = comment.ToCommentDto();
-            await _commentService.CreateAsync(commentDto);
+            var commentDto = createCommentDto.ToCommentDTOFromCreate(appUser, stock.Id);
+            var createdComment = await _commentService.CreateAsync(commentDto);
             
-            return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment.ToCommentDto());
+            return CreatedAtAction(nameof(GetById), new { id = createdComment.Id }, createdComment);
         }
 
         [HttpPut]
