@@ -9,8 +9,8 @@ namespace api.Interfaces
         Task<IQueryable<Stock>> GetAllAsync();
         Task<Stock?> GetByIdAsync(int id);
         Task<Stock?> GetBySymbolAsync(string symbol);
-        Task<Stock> CreateAsync(Stock stockModel);
-        Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto);
+        Task<Stock> CreateAsync(Stock stock);
+        Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto updateStockRequestDto);
         Task<Stock?> DeleteAsync(int id);
         Task<bool> StockExists(int id);
     }

@@ -19,25 +19,25 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<Stock> CreateAsync(Stock stockModel)
+        public async Task<Stock> CreateAsync(Stock stock)
         {
-            await _context.Stocks.AddAsync(stockModel);
+            await _context.Stocks.AddAsync(stock);
             await _context.SaveChangesAsync();
-            return stockModel;
+            return stock;
         }
 
         public async Task<Stock?> DeleteAsync(int id)
         {
-            var stockModel = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
+            var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (stockModel == null)
+            if (stock == null)
             {
                 return null;
             }
 
-            _context.Stocks.Remove(stockModel);
+            _context.Stocks.Remove(stock);
             await _context.SaveChangesAsync();
-            return stockModel;
+            return stock;
         }
 
         public async Task<IQueryable<Stock>> GetAllAsync()
@@ -60,7 +60,7 @@ namespace api.Repository
             return _context.Stocks.AnyAsync(s => s.Id == id);
         }
 
-        public async Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto)
+        public async Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto updateStockRequestDto)
         {
             var existingStock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -69,12 +69,12 @@ namespace api.Repository
                 return null;
             }
 
-            existingStock.Symbol = stockDto.Symbol;
-            existingStock.CompanyName = stockDto.CompanyName;
-            existingStock.Purchase = stockDto.Purchase;
-            existingStock.LastDiv = stockDto.LastDiv;
-            existingStock.Industry = stockDto.Industry;
-            existingStock.MarketCap = stockDto.MarketCap;
+            existingStock.Symbol = updateStockRequestDto.Symbol;
+            existingStock.CompanyName = updateStockRequestDto.CompanyName;
+            existingStock.Purchase = updateStockRequestDto.Purchase;
+            existingStock.LastDiv = updateStockRequestDto.LastDiv;
+            existingStock.Industry = updateStockRequestDto.Industry;
+            existingStock.MarketCap = updateStockRequestDto.MarketCap;
 
             await _context.SaveChangesAsync();
 
