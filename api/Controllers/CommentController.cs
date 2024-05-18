@@ -17,14 +17,12 @@ namespace api.Controllers
     {
         private readonly ICommentService _commentService;
         private readonly IStockService _stockService;
-        private readonly UserManager<AppUser> _userManager;
         private readonly IFMPService _fmpService;
 
-        public CommentController(ICommentService commentService, IStockService stockService, UserManager<AppUser> userManager, IFMPService fmpService)
+        public CommentController(ICommentService commentService, IStockService stockService, IFMPService fmpService)
         {
             _commentService = commentService;
             _stockService = stockService;
-            _userManager = userManager;
             _fmpService = fmpService;
         }
 
@@ -78,19 +76,13 @@ namespace api.Controllers
                 {
                     return BadRequest("Stock does not exists");
                 }
-                else
-                {
-                    await _stockService.CreateAsync(stock.ToCreateDTOFromStockDTO());
-                }
+
+                await _stockService.CreateAsync(stock.ToCreateDTOFromStockDTO());
             }
 
-            var username = User.GetUsername();
-            var appUser = await _userManager.FindByNameAsync(username);
-
             stock = await _stockService.GetBySymbolAsync(symbol);
-
-            var commentDto = createCommentDto.ToCommentDTOFromCreate(appUser, stock.Id);
-            var createdComment = await _commentService.CreateAsync(commentDto);
+            
+            var createdComment = await _commentService.CreateAsync(createCommentDto, stock.Id);
             
             return CreatedAtAction(nameof(GetById), new { id = createdComment.Id }, createdComment);
         }

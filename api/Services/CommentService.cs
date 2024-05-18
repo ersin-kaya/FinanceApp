@@ -46,14 +46,17 @@ public class CommentService : ICommentService
         return (await _commentRepository.GetByIdAsync(id)).ToCommentDto();
     }
 
-    public async Task<CommentDto> CreateAsync(CommentDto commentDto)
+    public async Task<CommentDto> CreateAsync(CreateCommentDto createCommentDto, int stockId)
     {
+        var appUser = await _userManager.GetCurrentUserAsync(_httpContextAccessor);
+        var commentDto = createCommentDto.ToCommentDTOFromCreate(appUser, stockId);
+        
         return (await _commentRepository.CreateAsync(commentDto.ToComment())).ToCommentDto();
     }
 
     public async Task<CommentDto?> UpdateAsync(int id, CommentDto commentDto)
     {
-        var appUser = await GetCurrentUserAsync();
+        var appUser = await _userManager.GetCurrentUserAsync(_httpContextAccessor);
         commentDto.AppUser = appUser;
         
         return (await _commentRepository.UpdateAsync(id, commentDto.ToComment())).ToCommentDto();
@@ -61,18 +64,11 @@ public class CommentService : ICommentService
 
     public async Task<CommentDto?> DeleteAsync(int id)
     {
-        var appUser = await GetCurrentUserAsync();
+        var appUser = await _userManager.GetCurrentUserAsync(_httpContextAccessor);
 
         var result = (await _commentRepository.DeleteAsync(id));
         result.AppUser = appUser;
         
         return result.ToCommentDto();
-    }
-
-    private async Task<AppUser?> GetCurrentUserAsync()
-    {
-        var username = _httpContextAccessor.HttpContext.User.GetUsername();
-        var appUser = await _userManager.FindByNameAsync(username);
-        return appUser;
     }
 }
