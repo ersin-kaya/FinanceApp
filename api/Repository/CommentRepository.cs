@@ -15,25 +15,25 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<Comment> CreateAsync(Comment commentModel)
+        public async Task<Comment> CreateAsync(Comment comment)
         {
-            await _context.Comments.AddAsync(commentModel);
+            await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
-            return commentModel;
+            return comment;
         }
 
         public async Task<Comment?> DeleteAsync(int id)
         {
-            var commentModel = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
+            var comment = await _context.Comments.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (commentModel == null)
+            if (comment == null)
             {
                 return null;
             }
 
-            _context.Comments.Remove(commentModel);
+            _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return commentModel;
+            return comment;
 
         }
 
@@ -47,7 +47,7 @@ namespace api.Repository
             return await _context.Comments.Include(a => a.AppUser).FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<Comment?> UpdateAsync(int id, Comment commentModel)
+        public async Task<Comment?> UpdateAsync(int id, Comment comment)
         {
             var existingComment = await _context.Comments.FindAsync(id);
 
@@ -56,8 +56,8 @@ namespace api.Repository
                 return null;
             }
 
-            existingComment.Title = commentModel.Title;
-            existingComment.Content = commentModel.Content;
+            existingComment.Title = comment.Title;
+            existingComment.Content = comment.Content;
 
             await _context.SaveChangesAsync();
             return existingComment;

@@ -6,7 +6,7 @@ namespace api.Services;
 
 public interface ICommentService
 {
-    Task<List<CommentDto>> GetAllAsync(CommentQueryObject commentQuery);
+    Task<List<CommentDto>> GetAllAsync(CommentQueryObject commentQueryObject);
     Task<CommentDto?> GetByIdAsync(int id);
     Task<CommentDto> CreateAsync(CommentDto commentDto);
     Task<CommentDto?> UpdateAsync(int id, CommentDto commentDto);

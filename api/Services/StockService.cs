@@ -9,7 +9,7 @@ namespace api.Services
 {
     public class StockService : IStockService
     {
-        public readonly IStockRepository _stockRepository;
+        private readonly IStockRepository _stockRepository;
 
         public StockService(IStockRepository stockRepository)
         {

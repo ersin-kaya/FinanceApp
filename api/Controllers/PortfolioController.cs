@@ -37,7 +37,7 @@ namespace api.Controllers
         {
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
-            var userPortfolio = await _portfolioService.GetUserPortfolio(appUser);
+            var userPortfolio = await _portfolioService.GetUserPortfolioAsync(appUser);
             return Ok(userPortfolio);
         }
 
@@ -67,23 +67,23 @@ namespace api.Controllers
                 return BadRequest("Stock not found");
             }
 
-            var userPortfolio = await _portfolioService.GetUserPortfolio(appUser);
+            var userPortfolio = await _portfolioService.GetUserPortfolioAsync(appUser);
 
             if (userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower()))
             {
                 return BadRequest("Cannot add same stock to portfolio");
             }
             
-            var portfolioModel = new PortfolioDto()
+            var portfolioDto = new PortfolioDto()
             {
                 StockId = stock.Id,
                 AppUserId = appUser.Id,
                 AppUser = appUser,
             };
 
-            await _portfolioService.CreateAsync(portfolioModel);
+            await _portfolioService.CreateAsync(portfolioDto);
 
-            if (portfolioModel == null)
+            if (portfolioDto == null)
             {
                 return StatusCode(500, "Could not create");
             }
@@ -99,13 +99,13 @@ namespace api.Controllers
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
 
-            var userPortfolio = await _portfolioService.GetUserPortfolio(appUser);
+            var userPortfolio = await _portfolioService.GetUserPortfolioAsync(appUser);
 
             var filteredStock = userPortfolio.Where(s => s.Symbol.ToLower() == symbol.ToLower()).ToList();
 
             if (filteredStock.Count == 1)
             {
-                await _portfolioService.DeletePortfolio(appUser, symbol);
+                await _portfolioService.DeletePortfolioAsync(appUser, symbol);
             }
             else
             {

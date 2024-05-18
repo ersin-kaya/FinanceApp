@@ -8,16 +8,16 @@ namespace api.Services;
 
 public class PortfolioService : IPortfolioService
 {
-    public readonly IPortfolioRepository _portfolioRepository;
+    private readonly IPortfolioRepository _portfolioRepository;
 
     public PortfolioService(IPortfolioRepository portfolioRepository)
     {
         _portfolioRepository = portfolioRepository;
     }
 
-    public async Task<List<StockDto>> GetUserPortfolio(AppUser user)
+    public async Task<List<StockDto>> GetUserPortfolioAsync(AppUser appUser)
     {
-        var stockDtos = (await _portfolioRepository.GetUserPortfolio(user)).Select(s=>s.ToStockDto()).ToList();
+        var stockDtos = (await _portfolioRepository.GetUserPortfolioAsync(appUser)).Select(s=>s.ToStockDto()).ToList();
         return stockDtos;
     }
 
@@ -26,8 +26,8 @@ public class PortfolioService : IPortfolioService
         return (await _portfolioRepository.CreateAsync(portfolioDto.ToPortfolio())).ToPortfolioDto();
     }
 
-    public async Task<PortfolioDto> DeletePortfolio(AppUser appUser, string symbol)
+    public async Task<PortfolioDto> DeletePortfolioAsync(AppUser appUser, string symbol)
     {
-        return (await _portfolioRepository.DeletePortfolio(appUser, symbol)).ToPortfolioDto();
+        return (await _portfolioRepository.DeletePortfolioAsync(appUser, symbol)).ToPortfolioDto();
     }
 }
