@@ -6,7 +6,7 @@ namespace api.Services;
 
 public interface IPortfolioService
 {
-    Task<List<StockDto>> GetUserPortfolioAsync(AppUser appUser);
-    Task<PortfolioDto> CreateAsync(PortfolioDto portfolioDto);
-    Task<PortfolioDto> DeletePortfolioAsync(AppUser appUser, string symbol);
+    Task<List<StockDto>> GetUserPortfolioAsync();
+    Task<PortfolioDto> CreateAsync(int stockId);
+    Task<PortfolioDto> DeletePortfolioAsync(string symbol);
 }

@@ -15,14 +15,12 @@ namespace api.Controllers
     [Authorize]
     public class PortfolioController : ControllerBase
     {
-        private readonly UserManager<AppUser> _userManager;
         private readonly IPortfolioService _portfolioService;
         private readonly IStockService _stockService;
         private readonly IFMPService _fmpService;
 
-        public PortfolioController(UserManager<AppUser> userManager, IPortfolioService portfolioService, IStockService stockService, IFMPService fmpService)
+        public PortfolioController(IPortfolioService portfolioService, IStockService stockService, IFMPService fmpService)
         {
-            _userManager = userManager;
             _portfolioService = portfolioService;
             _stockService = stockService;
             _fmpService = fmpService;
@@ -31,17 +29,13 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserPortfolio()
         {
-            var username = User.GetUsername();
-            var appUser = await _userManager.FindByNameAsync(username);
-            var userPortfolio = await _portfolioService.GetUserPortfolioAsync(appUser);
+            var userPortfolio = await _portfolioService.GetUserPortfolioAsync();
             return Ok(userPortfolio);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddPortfolio(string symbol)
         {
-            var username = User.GetUsername();
-            var appUser = await _userManager.FindByNameAsync(username);
             var stock = await _stockService.GetBySymbolAsync(symbol);
 
             if (stock == null)
@@ -52,10 +46,8 @@ namespace api.Controllers
                 {
                     return BadRequest("Stock does not exists");
                 }
-                else
-                {
-                    await _stockService.CreateAsync(stock.ToCreateDTOFromStockDTO());
-                }
+
+                await _stockService.CreateAsync(stock.ToCreateDTOFromStockDTO());
             }
 
             if (stock == null)
@@ -63,45 +55,33 @@ namespace api.Controllers
                 return BadRequest("Stock not found");
             }
 
-            var userPortfolio = await _portfolioService.GetUserPortfolioAsync(appUser);
+            var userPortfolio = await _portfolioService.GetUserPortfolioAsync();
 
             if (userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower()))
             {
                 return BadRequest("Cannot add same stock to portfolio");
             }
-            
-            var portfolioDto = new PortfolioDto()
-            {
-                StockId = stock.Id,
-                AppUserId = appUser.Id,
-                AppUser = appUser,
-            };
 
-            await _portfolioService.CreateAsync(portfolioDto);
+            var portfolioDto = await _portfolioService.CreateAsync(stock.Id);
 
             if (portfolioDto == null)
             {
                 return StatusCode(500, "Could not create");
             }
-            else
-            {
-                return Created();
-            }
+
+            return Created();
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeletePortfolio(string symbol)
         {
-            var username = User.GetUsername();
-            var appUser = await _userManager.FindByNameAsync(username);
-
-            var userPortfolio = await _portfolioService.GetUserPortfolioAsync(appUser);
+            var userPortfolio = await _portfolioService.GetUserPortfolioAsync();
 
             var filteredStock = userPortfolio.Where(s => s.Symbol.ToLower() == symbol.ToLower()).ToList();
 
             if (filteredStock.Count == 1)
             {
-                await _portfolioService.DeletePortfolioAsync(appUser, symbol);
+                await _portfolioService.DeletePortfolioAsync(symbol);
             }
             else
             {
