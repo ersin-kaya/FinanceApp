@@ -1,6 +1,5 @@
 using api.Dtos.Stock;
 using api.Helpers;
-using api.Models;
 
 namespace api.Services
 {

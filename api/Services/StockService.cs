@@ -2,7 +2,6 @@ using api.Dtos.Stock;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
-using api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
