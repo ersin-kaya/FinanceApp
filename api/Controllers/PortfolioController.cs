@@ -3,6 +3,7 @@ using api.Extensions;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using api.Responses;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -54,19 +55,12 @@ namespace api.Controllers
             {
                 return BadRequest("Stock not found");
             }
-
-            var userPortfolio = await _portfolioService.GetUserPortfolioAsync();
-
-            if (userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower()))
+            
+            var response = await _portfolioService.AddStockToPortfolioAsync(symbol, stock.Id);
+            
+            if (!response.Succeeded)
             {
-                return BadRequest("Cannot add same stock to portfolio");
-            }
-
-            var portfolioDto = await _portfolioService.CreateAsync(stock.Id);
-
-            if (portfolioDto == null)
-            {
-                return StatusCode(500, "Could not create");
+                return BadRequest(response.Message);
             }
 
             return Created();

@@ -4,7 +4,9 @@ using api.Extensions;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using api.Responses;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api.Services;
 
@@ -45,5 +47,24 @@ public class PortfolioService : IPortfolioService
     {
         var appUser = await _userManager.GetCurrentUserAsync(_httpContextAccessor);
         return (await _portfolioRepository.DeletePortfolioAsync(appUser, symbol)).ToPortfolioDto();
+    }
+
+    public async Task<IResponse> AddStockToPortfolioAsync(string symbol, int stockId)
+    {
+        var userPortfolio = await GetUserPortfolioAsync();
+        
+        if (userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower()))
+        {
+            return new FailedResponse<object>("Cannot add same stock to portfolio");
+        }
+        
+        var portfolioDto = await CreateAsync(stockId);
+        
+        if (portfolioDto == null)
+        {
+            return new FailedResponse<object>("Could not create");
+        }
+
+        return new SuccessfulResponse();
     }
 }
