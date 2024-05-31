@@ -10,8 +10,6 @@ Stock Tracking Application 📈📉
 
 I developed a new app that tracks global stock indices and displays stock values and company information, guided by Teddy Smith's video series. Users can create accounts to build their custom portfolios of stocks they want to follow and leave comments on them.
 
-Live demo: https://financeapp.ersinkaya.dev/
-
 Here are some of the technologies used in the app:
 
 #### Backend
